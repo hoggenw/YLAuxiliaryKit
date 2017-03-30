@@ -1,0 +1,16 @@
+PODS:
+  - YLAuxiliaryKit (0.1.0)
+
+DEPENDENCIES:
+  - YLAuxiliaryKit (from `../`)
+
+EXTERNAL SOURCES:
+  YLAuxiliaryKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  YLAuxiliaryKit: 6258e7b789db4345cf0390043d90243d478462a0
+
+PODFILE CHECKSUM: fc6e4257277f19ca95bbb483ffa1fe57e732ad54
+
+COCOAPODS: 1.2.0
