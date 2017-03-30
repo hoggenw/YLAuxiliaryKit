@@ -9,95 +9,95 @@
 import Foundation
 import UIKit
 
-fileprivate let IVString = "xxxxxxxxxxxxxxxxx"
-public extension String {
-    
-    func aesEncrypt(key:String,_ iv:String = IVString, options:Int = kCCOptionPKCS7Padding) -> String? {
-        if let keyData = key.data(using: String.Encoding.utf8),
-            let data = self.data(using: String.Encoding.utf8),
-            let cryptData    = NSMutableData(length: Int((data.count)) + kCCBlockSizeAES128) {
-            
-            let keyLength              = size_t(kCCKeySizeAES128)
-            let operation: CCOperation = UInt32(kCCEncrypt)
-            let algoritm:  CCAlgorithm = UInt32(kCCAlgorithmAES128)
-            let options:   CCOptions   = UInt32(options)
-            
-            var numBytesEncrypted :size_t = 0
-            
-            let cryptStatus = CCCrypt(operation,
-                                      algoritm,
-                                      options,
-                                      keyData.bytes, keyLength,
-                                      iv,
-                                      data.bytes, data.count,
-                                      cryptData.mutableBytes, cryptData.length,
-                                      &numBytesEncrypted)
-            
-            if UInt32(cryptStatus) == UInt32(kCCSuccess) {
-                cryptData.length = Int(numBytesEncrypted)
-                let base64cryptString = cryptData.base64EncodedString(options: .endLineWithLineFeed)
-                return base64cryptString
-            }
-            else {
-                return nil
-            }
-        }
-        return nil
-    }
-    
-    
-    func aesDecrypt(key:String, iv:String = IVString, options:Int = kCCOptionPKCS7Padding) -> String? {
-        if let keyData = key.data(using: String.Encoding.utf8),
-            let data = NSData(base64Encoded: self, options: .ignoreUnknownCharacters),
-            let cryptData    = NSMutableData(length: Int((data.length)) + kCCBlockSizeAES128) {
-            
-            let keyLength              = size_t(kCCKeySizeAES128)
-            let operation: CCOperation = UInt32(kCCDecrypt)
-            let algoritm:  CCAlgorithm = UInt32(kCCAlgorithmAES128)
-            let options:   CCOptions   = UInt32(options)
-            
-            var numBytesEncrypted :size_t = 0
-            
-            let cryptStatus = CCCrypt(operation,
-                                      algoritm,
-                                      options,
-                                      keyData.bytes, keyLength,
-                                      iv,
-                                      data.bytes, data.length,
-                                      cryptData.mutableBytes, cryptData.length,
-                                      &numBytesEncrypted)
-            
-            if UInt32(cryptStatus) == UInt32(kCCSuccess) {
-                cryptData.length = Int(numBytesEncrypted)
-                let unencryptedMessage = String(data: cryptData as Data, encoding:String.Encoding.utf8)
-                return unencryptedMessage
-            }
-            else {
-                return nil
-            }
-        }
-        return nil
-    }
-    
-    var md5:String {
-        let str = cString(using: String.Encoding.utf8)
-        let strLen = CC_LONG(lengthOfBytes(using: String.Encoding.utf8))
-        let digestLen = Int(CC_MD5_DIGEST_LENGTH)
-        let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
-        
-        CC_MD5(str!, strLen, result)
-        
-        let hash = NSMutableString()
-        for i in 0..<digestLen {
-            hash.appendFormat("%02x", result[i])
-        }
-        
-        result.deallocate(capacity: digestLen)
-        
-        return String(format: hash as String)
-    }
-    
-}
+//fileprivate let IVString = "xxxxxxxxxxxxxxxxx"
+//public extension String {
+//    
+//    func aesEncrypt(key:String,_ iv:String = IVString, options:Int = kCCOptionPKCS7Padding) -> String? {
+//        if let keyData = key.data(using: String.Encoding.utf8),
+//            let data = self.data(using: String.Encoding.utf8),
+//            let cryptData    = NSMutableData(length: Int((data.count)) + kCCBlockSizeAES128) {
+//            
+//            let keyLength              = size_t(kCCKeySizeAES128)
+//            let operation: CCOperation = UInt32(kCCEncrypt)
+//            let algoritm:  CCAlgorithm = UInt32(kCCAlgorithmAES128)
+//            let options:   CCOptions   = UInt32(options)
+//            
+//            var numBytesEncrypted :size_t = 0
+//            
+//            let cryptStatus = CCCrypt(operation,
+//                                      algoritm,
+//                                      options,
+//                                      keyData.bytes, keyLength,
+//                                      iv,
+//                                      data.bytes, data.count,
+//                                      cryptData.mutableBytes, cryptData.length,
+//                                      &numBytesEncrypted)
+//            
+//            if UInt32(cryptStatus) == UInt32(kCCSuccess) {
+//                cryptData.length = Int(numBytesEncrypted)
+//                let base64cryptString = cryptData.base64EncodedString(options: .endLineWithLineFeed)
+//                return base64cryptString
+//            }
+//            else {
+//                return nil
+//            }
+//        }
+//        return nil
+//    }
+//    
+//    
+//    func aesDecrypt(key:String, iv:String = IVString, options:Int = kCCOptionPKCS7Padding) -> String? {
+//        if let keyData = key.data(using: String.Encoding.utf8),
+//            let data = NSData(base64Encoded: self, options: .ignoreUnknownCharacters),
+//            let cryptData    = NSMutableData(length: Int((data.length)) + kCCBlockSizeAES128) {
+//            
+//            let keyLength              = size_t(kCCKeySizeAES128)
+//            let operation: CCOperation = UInt32(kCCDecrypt)
+//            let algoritm:  CCAlgorithm = UInt32(kCCAlgorithmAES128)
+//            let options:   CCOptions   = UInt32(options)
+//            
+//            var numBytesEncrypted :size_t = 0
+//            
+//            let cryptStatus = CCCrypt(operation,
+//                                      algoritm,
+//                                      options,
+//                                      keyData.bytes, keyLength,
+//                                      iv,
+//                                      data.bytes, data.length,
+//                                      cryptData.mutableBytes, cryptData.length,
+//                                      &numBytesEncrypted)
+//            
+//            if UInt32(cryptStatus) == UInt32(kCCSuccess) {
+//                cryptData.length = Int(numBytesEncrypted)
+//                let unencryptedMessage = String(data: cryptData as Data, encoding:String.Encoding.utf8)
+//                return unencryptedMessage
+//            }
+//            else {
+//                return nil
+//            }
+//        }
+//        return nil
+//    }
+//    
+//    var md5:String {
+//        let str = cString(using: String.Encoding.utf8)
+//        let strLen = CC_LONG(lengthOfBytes(using: String.Encoding.utf8))
+//        let digestLen = Int(CC_MD5_DIGEST_LENGTH)
+//        let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
+//        
+//        CC_MD5(str!, strLen, result)
+//        
+//        let hash = NSMutableString()
+//        for i in 0..<digestLen {
+//            hash.appendFormat("%02x", result[i])
+//        }
+//        
+//        result.deallocate(capacity: digestLen)
+//        
+//        return String(format: hash as String)
+//    }
+//    
+//}
 
 public extension String {
     
