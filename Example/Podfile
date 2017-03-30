@@ -1,0 +1,6 @@
+use_frameworks!
+target 'YLAuxiliaryKit_Tests' do
+  pod 'YLAuxiliaryKit', :path => '../'
+  
+  
+end
